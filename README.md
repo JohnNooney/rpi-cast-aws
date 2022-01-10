@@ -1,2 +1,2 @@
 # rpi-cast-aws
-RaspberryPi as MiraCast receiver with logging integration to AWS
+RaspberryPi as MiraCast receiver with logging to AWS
