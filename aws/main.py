@@ -1,5 +1,7 @@
 import boto3
-from botocore.config import Config
+import json
+import datetime
+
 
 def dynamo_get_table(name):
     # Get the service resource.
@@ -18,21 +20,28 @@ def dynamo_get_table(name):
     print(table.creation_date_time)
     return table
 
+
 # put item as specificed json format
 def dynamo_put(table, data):
-    table.put_item(Item=data)
+    request = table.put_item(Item=data)
+    print(request)
 
-def s3_get_buckets():
-    s3 = boto3.resource('s3')
+# convert text file with json contents into json variable
+def text_to_json(txt_file):
+    with open(txt_file, "rb") as fin:
+        content = json.load(fin)
+        return content
 
-    for bucket in s3.buckets.all():
-        print(bucket.name)
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    table = dynamo_get_table('test-ddb')
+    table = dynamo_get_table('test-ddb')  # CHANGE DATABASE TO USE REAL ONE
+    data = text_to_json("testdata.txt")  # CHANGE HASH AND SORT KEY
+    data["log-hash"] = str(datetime.datetime.now())  # change datetime to now
 
-    #s3_get_buckets()
+    print(data)
+
+    dynamo_put(table, data)
 
 
 
