@@ -1,0 +1,9 @@
+{
+'time': '2022-01-13 13:38:43.662000+00:00',
+'session': 1,
+'user': 'tester',
+'status': 'active',
+'duration': '5 hours',
+'fault': 'none',
+'restarts': 0
+}
