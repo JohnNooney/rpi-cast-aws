@@ -1,5 +1,6 @@
 *.pem
 *.idea
+*.vscode
 # Logs
 logs
 *.log
