@@ -1,15 +1,20 @@
 /*
  ============================================================================
  Name        : piirq02.c
- Author      : Dr Abdul Razaq
- Version     : 0.5
+ Author      : John Nooney
+ Version     : 0.1
  Copyright   : See Abertay copyright notice
- Description : RPi Zero Wireless - IRQ test with LED and Push button
+ Description : RPi Zero Wireless - IRQ with LED and Push button for RPiPlay status updates
  ============================================================================
  */
 #include <linux/module.h>
 #include <linux/gpio.h>
 #include <linux/interrupt.h>
+#include <linux/stdlib.h>
+
+//Red LED = BCM pin 18
+//Green LED = BCM pin 24
+//button = BCM pin 3
 
 static bool	State = 0;
 static unsigned int Led = 23;
@@ -73,6 +78,6 @@ void __exit piirq_exit(void){
 module_init(piirq_init);
 module_exit(piirq_exit);
 MODULE_LICENSE("GPL");
-MODULE_AUTHOR("Dr AR CMP408");
+MODULE_AUTHOR("Nooney CMP408");
 MODULE_DESCRIPTION("RPi IRQ Test with 2 lights");
 MODULE_VERSION("0.5");
