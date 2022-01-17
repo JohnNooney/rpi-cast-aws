@@ -1,0 +1,21 @@
+{
+  "name": "adminjs",
+  "version": "1.0.0",
+  "description": "admin ui for rpi to aws app",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon ./index.js"
+  },
+  "author": "nooney",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.2",
+    "fs": "0.0.1-security",
+    "http": "0.0.1-security",
+    "path": "^0.12.7",
+    "pug": "^3.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
