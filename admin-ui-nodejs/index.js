@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 require('dotenv').config()
+list = require('./public/script.js').Request;
 
 const app = express();
 const port = process.env.PORT || "8000";
@@ -23,3 +24,9 @@ console.log(`Listening to requests on http://localhost:${port}`);
 app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname, '/public/index.html'));
   });
+
+app.get('/request', async function(req, res) {
+    const dataItems = await list.prototype.getAwsData();
+    console.log("data sending: ", dataItems);
+    res.send(dataItems);
+});

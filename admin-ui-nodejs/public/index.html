@@ -7,32 +7,96 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-  <div style="margin:100px;">
+    <div style="margin:10px;">
    
-<nav class="navbar navbar-inverse navbar-static-top">
-  <div class="container">
-    <a class="navbar-brand" href="/">Express HTML</a>
-    <ul class="nav navbar-nav">
-      <li class="active">
-        <a href="/">Home</a>
-      </li>
-      <li>
-        <a href="/about">About</a>
-      </li>
-      <li>
-        <a href="/sitemap">Sitemap</a>
-      </li>
-    </ul>
-  </div>
-</nav>
-    <div class="jumbotron"  style="padding:40px;">
-      <h1>Hello, world!</h1>
-      <p>This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
-      <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p>
+    <!-- <nav class="navbar navbar-inverse navbar-static-top">
+    <div class="container">
+        <a class="navbar-brand" href="/">Express HTML</a>
+        <ul class="nav navbar-nav">
+        <li class="active">
+            <a href="/">Home</a>
+        </li>
+        <li>
+            <a href="/about">About</a>
+        </li>
+        <li>
+            <a href="/sitemap">Sitemap</a>
+        </li>
+        </ul>
     </div>
-  </div>
+    </nav> -->
+    
+        <div class="jumbotron"  style="padding:40px;">
+        <!-- <h1>Hello, world!</h1>
+        <p>This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+        <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p> -->
+            <div id="button">Get this List</div>
+            <div id="response">
+                <table class="table" id="dataTable">
+                    <thead>
+                        <tr>
+                        <th scope="col">Date Time</th>
+                        <th scope="col">User</th>
+                        <th scope="col">Session</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Duration</th>
+                        <th scope="col">Fault</th>
+                        <th scope="col">Restarts</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#button').click(function() {
+                // run an AJAX get request to the route you setup above...
+                // respect the cross-domain policy by using the same domain
+                // you used to access your index.html file!
+                $.get('http://localhost:8000/request', function(data) {
+                    // alert("test");
+                    //console.log(data);
+                    //$('#response').html(data[0].RpiSessio nStatus.S); // show the list
+                    var tbl_body = document.createElement("tbody");
+                    var odd_even = false;
+                    
+                    $.each(data, function() {
+                        //console.log(data);
+                        var tbl_row = tbl_body.insertRow();
+                        tbl_row.className = odd_even ? "odd" : "even";
+
+                        console.log("data row ",this);
+                        var cell1 = tbl_row.insertCell();
+                        var cell2 = tbl_row.insertCell();
+                        var cell3 = tbl_row.insertCell();
+                        var cell4 = tbl_row.insertCell();
+                        var cell5 = tbl_row.insertCell();
+                        var cell6 = tbl_row.insertCell();
+                        var cell7 = tbl_row.insertCell();
+
+                        cell1.appendChild(document.createTextNode(this.RpiDateTime.S.toString()));
+                        cell2.appendChild(document.createTextNode(this.RpiUser.S.toString()));
+                        cell3.appendChild(document.createTextNode(this.RpiSession.S.toString()));
+                        cell4.appendChild(document.createTextNode(this.RpiSessionStatus.S.toString()));
+                        cell5.appendChild(document.createTextNode(this.RpiDuration.S.toString()));
+                        cell6.appendChild(document.createTextNode(this.RpiFault.S.toString()));
+                        cell7.appendChild(document.createTextNode(this.RpiRestarts.S.toString()));
+                        // $.each(this, function(k , value) {
+                        //         var cell = tbl_row.insertCell();
+                        //         cell.appendChild(document.createTextNode(value.S.toString()));
+                        //     });        
+                            odd_even = !odd_even;               
+                     });
+                    $("#dataTable").append(tbl_body);
+                });
+            });
+        });
+        </script>
 </body>
-<!-- 
-<script src="https://sdk.amazonaws.com/js/aws-sdk-2.1058.0.min.js"></script> -->
-<script src="script.js"></script>
+
+<!-- <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1058.0.min.js"></script>
+<script src="script.js"></script> -->
 </html>
