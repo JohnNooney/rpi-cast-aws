@@ -1,9 +1,9 @@
 {
-"log-hash":"2022-01-13 13:38:45.662000+00:00",
-"log-sort":"tester",
-"session": 1,
-"status": "active",
-"duration": "5 hours",
-"fault": "none",
-"restarts": 0
+"RpiDateTime":"2022-01-13 13:38:45.662000+00:00",
+"RpiUser":"tester",
+"RpiSession": 1,
+"RpiSessionStatus": "active",
+"RpiDuration": "5 hours",
+"RpiFaults": "none",
+"RpiRestarts": 0
 }
