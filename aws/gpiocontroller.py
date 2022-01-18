@@ -1,28 +1,57 @@
 import json
 import datetime
+import subprocess
+from gpiozero import LED
+from gpiozero import Button
+
+# Red led = gpio 24
+# Green led = gpio 18
+# Button = gpio 3
 
 
-def dynamo_get_table(name):
-
-
+def start_subprocess(cmd):
+    output = subprocess.run(cmd, capture_output=True)
+    print(output)
 
 # put item as specificed json format
-def dynamo_put(table, data):
+def generate_log(table, data):
     request = table.put_item(Item=data)
     print(request)
-
-# convert text file with json contents into json variable
-def text_to_json(txt_file):
-    with open(txt_file, "rb") as fin:
-        content = json.load(fin)
-        return content
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    table = dynamo_get_table('test-ddb')  # CHANGE DATABASE TO USE REAL ONE
-    data = text_to_json("testdata.txt")  # CHANGE HASH AND SORT KEY
-    data["log-hash"] = str(datetime.datetime.now())  # change datetime to now
+    state = False
+    flag = True
+    start_time = datetime.datetime.now()
+    green_led = LED(18)
+    red_led = LED(24)
+    button = Button(3)
+    counter = 0
+
+    while(flag):
+        button.wait_for_press()
+        counter+=1
+        state != state
+
+        print("times pressed:", counter)
+
+        if state:
+            # turn on green LED
+            green_led.on()
+            red_led.off()
+
+            # construct log
+            # send log to aws
+            # start AirPlay server
+        else:
+            # turn on red LED
+            green_led.off()
+            red_led.on()
+
+            # stop airplay server
+            # construct log
+            # submit log
 
     print(data)
 
