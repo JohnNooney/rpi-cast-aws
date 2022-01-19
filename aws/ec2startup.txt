@@ -1,0 +1,30 @@
+-- Use Below for startup script on EC2 --
+
+#! /bin/sh
+yum update -y
+amazon-linux-extras install docker
+service docker start
+usermod -a -G docker ec2-user
+chkconfig docker on
+
+# Login to ECR
+
+GET_LOGIN_OUTPUT="$(aws --region=us-east-1 ecr get-login --no-include-email)"
+LOGIN_ARGS="$(echo "$GET_LOGIN_OUTPUT" | sed 's/^docker login \(.*\)/\1/g')"
+
+if [ -n "$LOGIN_ARGS" ]; then
+    docker login ${LOGIN_ARGS[@]}
+    if [ $? -eq 0 ]; then
+        >&2 echo "Docker login succeeded"
+
+        # Pull Docker Image and start it
+        >&2 echo "Running docker image pull"
+        docker pull 299499485753.dkr.ecr.us-east-1.amazonaws.com/rpi-aws:0.0.3
+    else
+        >&2 echo "Docker login failed"
+        exit 1
+    fi
+else
+    >&2 echo "Failed to acquire docker login credentials"
+    exit 1
+fi
