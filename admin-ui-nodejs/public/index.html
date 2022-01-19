@@ -53,14 +53,19 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $('#button').click(function() {
+                //Remove items from list
+                var tbl_body_delete = document.getElementById('table-body');
+                $(tbl_body_delete).remove(); 
+                
                 // run an AJAX get request to the route you setup above...
                 // respect the cross-domain policy by using the same domain
                 // you used to access your index.html file!
-                $.get('http://localhost:8000/request', function(data) {
+                $.get('/request', function(data) {
                     // alert("test");
                     //console.log(data);
                     //$('#response').html(data[0].RpiSessio nStatus.S); // show the list
                     var tbl_body = document.createElement("tbody");
+                    tbl_body.setAttribute("id", "table-body");
                     var odd_even = false;
                     
                     $.each(data, function() {
