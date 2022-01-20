@@ -7,24 +7,28 @@ service docker start
 usermod -a -G docker ec2-user
 chkconfig docker on
 
-# Login to ECR
+# make aws cred files
+mkdir /home/ec2-user/.aws
 
-GET_LOGIN_OUTPUT="$(aws --region=us-east-1 ecr get-login --no-include-email)"
-LOGIN_ARGS="$(echo "$GET_LOGIN_OUTPUT" | sed 's/^docker login \(.*\)/\1/g')"
+# create aws auth folders and files
+cat > /home/ec2-user/.aws/credentials << EOF1
+[default]
+aws_access_key_id=ASI************F4
+aws_secret_access_key=u4*******************CA
+aws_session_token=Fw**********************************7t
+EOF1
 
-if [ -n "$LOGIN_ARGS" ]; then
-    docker login ${LOGIN_ARGS[@]}
-    if [ $? -eq 0 ]; then
-        >&2 echo "Docker login succeeded"
+cat > /home/ec2-user/.aws/config << EOF2
+[default]
+region=us-east-1
+output=json
+EOF2
 
-        # Pull Docker Image and start it
-        >&2 echo "Running docker image pull"
-        docker pull 299499485753.dkr.ecr.us-east-1.amazonaws.com/rpi-aws:0.0.3
-    else
-        >&2 echo "Docker login failed"
-        exit 1
-    fi
-else
-    >&2 echo "Failed to acquire docker login credentials"
-    exit 1
-fi
+# launch container from private ECR
+# commands are appended to startup script for ec2 instances
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 2********3.dkr.ecr.us-east-1.amazonaws.com >> /home/ec2-user/.bashrc
+docker run -d -e PORT=80 -e AWS_ACCESS_KEY_ID='ASI************F4' -e AWS_SECRET_ACCESS_KEY='u4*******************CA' -e AWS_SESSION_TOKEN='Fw**********************************7t' -p 80:80 2*******3.dkr.ecr.us-east-1.amazonaws.com/rpi-aws:0.0.4 >> /home/ec2-user/.bashrc
+
+# just to make sure add startup commands to root user as well (may be redundant)
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 2********3.dkr.ecr.us-east-1.amazonaws.com >> /home/ec2-user/.bashrc
+docker run -d -e PORT=80 -e AWS_ACCESS_KEY_ID='ASI************F4' -e AWS_SECRET_ACCESS_KEY='u4*******************CA' -e AWS_SESSION_TOKEN='Fw**********************************7t' -p 80:80 2*******3.dkr.ecr.us-east-1.amazonaws.com/rpi-aws:0.0.4 >> /home/ec2-user/.bashrc
