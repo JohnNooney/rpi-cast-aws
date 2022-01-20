@@ -9,6 +9,7 @@ import datetime
 import subprocess as sp
 import boto3
 import time
+import sys
 from gpiozero import LED
 from gpiozero import Button
 # Red led = gpio 24
@@ -16,7 +17,7 @@ from gpiozero import Button
 # Button = gpio 3
 
 class RpiHandler:
-    def __init__(self, table_name):
+    def __init__(self, table_name, username):
         self.state = False
         self.start_time = datetime.datetime.now()
         self.green_led = LED(18)
@@ -25,16 +26,13 @@ class RpiHandler:
         self.counter = 0
         self.restarts = 0
         self.table_name = table_name
+        self.user = username
+        self.session_status = ""
 
     # put item as specificed json format
     def generate_log(self):
         time_delta = datetime.datetime.now() - self.start_time
-        user = "tester1"
-        data_str = '{"RpiDateTime":"00:00:0123","RpiUser":"'+user+'\
-        ","RpiSession":"'+str(self.counter)+'\
-        ","RpiSessionStatus": "active",\
-        "RpiDuration":"00:00:0123","RpiFault": "none",\
-        "RpiRestarts":"'+str(self.restarts)+'"}'
+        data_str = '{"RpiDateTime":"00:00:0123","RpiUser":"'+self.user+'","RpiSession":"'+str(self.counter)+'","RpiSessionStatus": "'+self.session_status+'","RpiDuration":"00:00:0123","RpiFault": "none","RpiRestarts":"'+str(self.restarts)+'"}'
 
         data_json = json.loads(data_str)
         data_json["RpiDateTime"] = str(self.start_time)
@@ -53,6 +51,8 @@ class RpiHandler:
             print("Green LED on.")
             self.green_led.on()
             self.red_led.off()
+
+            self.session_status = "active"
 
             # construct log
             print("Sending initial log to AWS...")
@@ -77,6 +77,8 @@ class RpiHandler:
             print("Red LED on.")
             self.green_led.off()
             self.red_led.on()
+
+            self.session_status = "inactive"
 
             # stop airplay server
             print("Stopping AirPlay Server...")
@@ -122,7 +124,11 @@ if __name__ == '__main__':
     print("Welcome to the RPi and AWS controller!")
     print("press your button to start the AirPlay server")
     flag = True
-    rpi = RpiHandler("rpi-aws-log")
+    username = "test user"
+    if len(sys.argv) > 1:
+        username = str(sys.argv[1])
+
+    rpi = RpiHandler("rpi-aws-log", username)
 
     while(flag):
         rpi.button.when_pressed = rpi.handle
