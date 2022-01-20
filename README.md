@@ -3,7 +3,7 @@ RaspberryPi as AirPlay receiver with logging to AWS. The main goal of this proje
 provide a foundational for the system architecutre found in typical ChomeCast, FireStick, and AppleTV devices.
 These devices usually have some cloud service integrations. So in order to replicate this environment a simple 
 Admin logging SPA will be running in a cloud instance. In addition, this project relies on the github project [RPiPlay](https://github.com/FD-/RPiPlay) 
-to work end-to-end.  
+to work end-to-end.
 
 # RPi Setup
 1. run `sudo apt update` and `sudo apt upgrade` 
@@ -12,7 +12,12 @@ to work end-to-end.
 4. clone this repo into `/home/pi/Downloads` as well
 5. create aws auth directory in `~/.aws` with required credentials file
 6. install the required packages with `pip3 install -r requirements.txt`
-7. start python program with `python3 gpiocontroller.py`
+7. start python program with `python3 gpiocontroller.py` OR `python3 gpiocontroller.py <username>` 
+
+**NOTE**
+Originally this project was going to use an LKM for providing the RPi functionality (see lkm-dataflow diagram and ./rpi/piirq.c) but due to 
+security concerns around running call_usermodehelper() to make user-space calls from the kernel; this was abandonded. Instead the python script (./rpi/gpiocontroller.py)
+holds all the main functionality. This is an infinite loop program intended to be launched at RPi startup but can simply be started following the steps above.
 
 # Docker Setup
 1. Install Docker
