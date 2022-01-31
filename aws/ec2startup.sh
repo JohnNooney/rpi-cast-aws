@@ -1,5 +1,3 @@
--- Use Below for startup script on EC2 --
-
 #! /bin/sh
 yum update -y
 amazon-linux-extras install docker
